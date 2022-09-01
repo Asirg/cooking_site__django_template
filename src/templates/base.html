@@ -1,0 +1,26 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title> 
+            {% block title %} 
+                Нямки - самые вкусные и необычные рецепты 
+            {% endblock title %} 
+        </title>
+    
+        <link rel="stylesheet" href="{% static 'css/main.css'%}">
+    </head>
+
+    <body>
+        <header>
+            {% include 'include/header.html' %}
+        </header>
+        {% block base %}
+        {% endblock base %}
+        <footer>
+            {% include 'include/footer.html' %}
+        </footer>
+    </body>
+</html>

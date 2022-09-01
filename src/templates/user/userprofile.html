@@ -1,0 +1,36 @@
+{% extends 'nyamki/base.html' %}
+
+{% load nyamki_tags %}
+
+{% block content %}
+
+
+    <div>
+        <h1>Рецепты</h1>
+        <ul>
+            {% for article in user.profile.save_articles.all %}
+                <li>
+                    <a href="{% url 'nyamki:article' article.url %}">
+                        {{ article.name }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div>
+        <h1>Статьи</h1>
+        <ul>
+            {% for article in user.profile.save_articles.all %}
+                <li>
+                    <a href="{% url 'nyamki:article' article.url %}">
+                        {{ article.name }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+
+
+{% endblock content %}

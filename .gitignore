@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+src/media/*
+src/templates/nyamki/*
+src/templates/include/*
+src/static/*
