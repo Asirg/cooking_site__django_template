@@ -88,5 +88,10 @@ class СalculatorView(ListView):
 
     template_name="nyamki/calculator.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        return context
+
     def get_queryset(self):
         return Article.objects.filter(name__isnull=False, type_id=1)

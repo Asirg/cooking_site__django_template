@@ -4,36 +4,31 @@
 
 {% block content %}
     <div id="user-profile">
-        <div class="user-profile-save">
-            <h1>Рецепты</h1>
-            <div class="user-profile-save-list">
-
-            </div>
-
+        <div class="user-profile-header">
+            <h1>Сохраненное</h1>
         </div>
-        
-        <ul>
-            {% for article in user.profile.save_articles.all %}
-                <li>
-                    <a href="{% url 'nyamki:article' article.url %}">
-                        {{ article.name }}
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+        <div class="user-profile-save-list">
+            {% for content in article_list%}
 
-    <div>
-        <h1>Статьи</h1>
-        <ul>
-            {% for article in user.profile.save_articles.all %}
-                <li>
-                    <a href="{% url 'nyamki:article' article.url %}">
-                        {{ article.name }}
+                <div class="content_block_nrow">
+                    <a href="{% url 'nyamki:article' content.url %}">
+                        <img src="{{ content.image.url }}" class="content_block_img_2row">
                     </a>
-                </li>
+                    
+                    <div class="content_block_description_2row">
+                        <a href="{% url 'nyamki:article' content.url %}">
+                            {{ content.name }}
+                        </a>
+                        <span>{{ content.description|truncatechars:100 }}</span>
+                        <form action="{% url 'user:delete_article' content.id %}" method="post" class="deleteform">
+                            {% csrf_token %}
+                            <button type="submit"><img src="/media/but_delete.png"></button>
+                        </form>
+                    </div>
+                </div>
             {% endfor %}
-        </ul>
+        </div>
+        {% include 'include/elements/paginator.html' %}
     </div>
 
 {% endblock content %}
