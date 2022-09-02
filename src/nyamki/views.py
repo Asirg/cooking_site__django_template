@@ -95,3 +95,12 @@ class СalculatorView(ListView):
 
     def get_queryset(self):
         return Article.objects.filter(name__isnull=False, type_id=1)
+
+class ArticlePrintView(DetailView):
+    model = Article
+    slug_field = "url"
+
+    template_name = "nyamki/article_print.html"
+
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
