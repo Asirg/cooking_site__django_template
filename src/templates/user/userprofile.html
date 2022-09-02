@@ -3,10 +3,15 @@
 {% load nyamki_tags %}
 
 {% block content %}
+    <div id="user-profile">
+        <div class="user-profile-save">
+            <h1>Рецепты</h1>
+            <div class="user-profile-save-list">
 
+            </div>
 
-    <div>
-        <h1>Рецепты</h1>
+        </div>
+        
         <ul>
             {% for article in user.profile.save_articles.all %}
                 <li>
@@ -30,7 +35,5 @@
             {% endfor %}
         </ul>
     </div>
-
-
 
 {% endblock content %}

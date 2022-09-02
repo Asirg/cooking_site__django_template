@@ -63,9 +63,10 @@ class AddComment(View):
 
         user = get_user_model().objects.get(id=user_pk)
         article = Article.objects.get(id=article_pk)
-
-        id = int(request.POST.get("parent"))
-        if id > 0:
+        
+        id = request.POST.get("parent")
+        id = int(id) if id else False
+        if id > 0 or not id:
             parent = Comment.objects.get(pk=id) if id else None
 
             comment = Comment(
