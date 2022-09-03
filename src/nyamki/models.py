@@ -108,10 +108,10 @@ class Article(models.Model):
         for group in self.groupofingredients_set.all():
             for ingredient in group.cookingingredient_set.all():
                 weight = ingredient.value * ingredient.unit.in_grams
-                nutritional_value['calories'] +=  ingredient.ingredient.calories * weight
-                nutritional_value['proteins'] +=  ingredient.ingredient.proteins  * weight
-                nutritional_value['carbohydrates'] +=  ingredient.ingredient.carbohydrates * weight
-                nutritional_value['fats'] +=  ingredient.ingredient.fats * weight
+                nutritional_value['calories'] +=  ingredient.ingredient.calories * weight / 100
+                nutritional_value['proteins'] +=  ingredient.ingredient.proteins  * weight / 100
+                nutritional_value['carbohydrates'] +=  ingredient.ingredient.carbohydrates * weight / 100
+                nutritional_value['fats'] +=  ingredient.ingredient.fats * weight / 100
         return nutritional_value
 
     def __str__(self) -> str:
