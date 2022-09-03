@@ -36,6 +36,8 @@ class ArticleView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['comments'] = self.get_object().comment_set.order_by('date')
+        context['nutritional_value'] = self.get_object().get_nutritional_value()
+
         context['dishes_bar'] = Article.objects.order_by('?')[:10]
         return context
 

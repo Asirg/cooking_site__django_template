@@ -30,6 +30,10 @@ def get_articles_list(type, count):
 def get_item(value, key):
     return value[key]
 
+@register.filter()
+def floatdot(value, count=1):
+    return f"{value:.{count}f}"
+
 
 html_answer = lambda username: f"""
                                   <img src="/media/answer.png" class="comment-header-answer-icon">
