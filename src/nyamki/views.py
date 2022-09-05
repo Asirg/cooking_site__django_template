@@ -1,8 +1,15 @@
+from unicodedata import category
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import get_user_model
 from django.views.generic import View, ListView, DetailView, CreateView, TemplateView
 
+from django.core import serializers
+
 from nyamki.models import Category, Label, Keyword, Article, GroupOfIngredients, Ingredient, Unit, CookingIngredient, GroupOfInstructions, Instruction, Comment
+
+import json
+
 
 # Create your views here.
 
@@ -18,14 +25,22 @@ class ArticleListView(ListView):
 
     template_name = "nyamki/article_category.html"
 
+    def get_queryset(self):
+        return Article.objects.filter(**{f"{self.kwargs['type']}__url":self.kwargs['value']}, draft=False)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.kwargs['type'] == "categories":
+            context["category"] = Category.objects.filter(url=self.kwargs['value']).first()
+        return context
+
     def get(self, request, *args, **kwargs):
-        self.object_list = Article.objects.filter(**{f"{kwargs['type']}__url":kwargs['value']}, draft=False)
-        context = super().get_context_data()
+        
+        if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            queryset = list(self.get_queryset().values("pk", "name", "image"))
+            return JsonResponse(queryset, safe=False)
 
-        if kwargs['type'] == "categories":
-            context["category"] = Category.objects.filter(url=kwargs['value']).first()
-
-        return super().render_to_response(context)
+        return super().get(request, *args, **kwargs)
 
 class ArticleView(DetailView):
     model = Article
@@ -48,15 +63,26 @@ class SearchView(ListView):
 
     template_name="nyamki/search.html"
 
+    def get(self, request, *args, **kwargs):
+
+        if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            q = self.request.GET.get("q")
+            if q:
+                queryset = list(Article.objects.filter(name__icontains=q.lower(), draft=False).values("pk", "name", "image"))
+                return JsonResponse(queryset, safe=False)
+            else:
+                return JsonResponse({})
+
+        return super().get(request, *args, **kwargs)
+
+
     def get_queryset(self):
         q = self.request.GET.get("q")
         if q:
-            queryset = Article.objects.filter(name__icontains=q.lower())
+            queryset = Article.objects.filter(name__icontains=q.lower(), draft=False)
         else:
             queryset = super().get_queryset()
-
         return queryset
-
 
 class AddComment(View):
     """Добавления комментария"""
@@ -90,13 +116,8 @@ class СalculatorView(ListView):
 
     template_name="nyamki/calculator.html"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        
-        return context
-
     def get_queryset(self):
-        return Article.objects.filter(name__isnull=False, type_id=1)
+        return Article.objects.filter(name__isnull=False, type_id=1, draft=False)
 
 class ArticlePrintView(DetailView):
     model = Article
