@@ -1,3 +1,4 @@
+import unittest
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -113,6 +114,18 @@ class Article(models.Model):
                 nutritional_value['carbohydrates'] +=  ingredient.ingredient.carbohydrates * weight / 100
                 nutritional_value['fats'] +=  ingredient.ingredient.fats * weight / 100
         return nutritional_value
+
+    def get_ingredients(self) -> dict:
+        ingredients = {}
+
+        for group in self.groupofingredients_set.all():
+            for ingredient in group.cookingingredient_set.all():
+                if ingredient.ingredient.name in ingredients.keys():
+                    ingredients[ingredient.ingredient.name] += ingredient.unit.in_grams * ingredient.value 
+                else:
+                    ingredients[ingredient.ingredient.name] = ingredient.unit.in_grams * ingredient.value 
+
+        return ingredients
 
     def __str__(self) -> str:
         return self.name

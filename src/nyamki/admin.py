@@ -17,7 +17,7 @@ class ShowImage():
 
 @admin.register(Category)
 class CategoryAdmin(ShowImage, TranslationAdmin):
-    list_display = ("name_ru", )
+    list_display = ("name_ru", "id")
 
     readonly_fields = ("ShowImage", )
     fieldsets = (

@@ -1,3 +1,4 @@
+from shutil import register_unpack_format
 from unicodedata import category
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, reverse
@@ -26,6 +27,8 @@ class ArticleListView(ListView):
     template_name = "nyamki/article_category.html"
 
     def get_queryset(self):
+        if self.kwargs['type'] == "user":
+            return self.request.user.profile.save_articles.all().filter(type_id=1)
         return Article.objects.filter(**{f"{self.kwargs['type']}__url":self.kwargs['value']}, draft=False)
 
     def get_context_data(self, **kwargs):
@@ -37,7 +40,7 @@ class ArticleListView(ListView):
     def get(self, request, *args, **kwargs):
         
         if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            queryset = list(self.get_queryset().values("pk", "name", "image"))
+            queryset = list(self.get_queryset().filter(type_id=1).values("url", "name", "image"))
             return JsonResponse(queryset, safe=False)
 
         return super().get(request, *args, **kwargs)
@@ -56,6 +59,18 @@ class ArticleView(DetailView):
         context['dishes_bar'] = Article.objects.order_by('?')[:10]
         return context
 
+    def get(self, request, *args, **kwargs):
+    
+        if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            obj = self.get_object()
+            recipe_data = {
+                **obj.get_nutritional_value(),
+                **obj.get_ingredients()
+            }
+            return JsonResponse(recipe_data, safe=False)
+
+        return super().get(request, *args, **kwargs)
+
 class SearchView(ListView):
     model=Article
 
@@ -68,7 +83,7 @@ class SearchView(ListView):
         if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             q = self.request.GET.get("q")
             if q:
-                queryset = list(Article.objects.filter(name__icontains=q.lower(), draft=False).values("pk", "name", "image"))
+                queryset = list(Article.objects.filter(name__icontains=q.lower(), type_id=1, draft=False).values("url", "name", "image"))
                 return JsonResponse(queryset, safe=False)
             else:
                 return JsonResponse({})
@@ -117,7 +132,7 @@ class СalculatorView(ListView):
     template_name="nyamki/calculator.html"
 
     def get_queryset(self):
-        return Article.objects.filter(name__isnull=False, type_id=1, draft=False)
+        return self.request.user.profile.save_articles.all().filter(type_id=1)
 
 class ArticlePrintView(DetailView):
     model = Article

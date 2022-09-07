@@ -7,19 +7,19 @@ register = template.Library()
 
 @register.simple_tag()
 def get_recipe_categories():
-    return Category.objects.filter(for_article=0)
+    return Category.objects.filter(for_article=0).order_by("id")
 
 @register.simple_tag()
 def get_recipe_labels():
-    return Label.objects.all()
+    return Label.objects.all().order_by("id")
 
 @register.simple_tag()
 def get_recipe_keywords():
-    return Keyword.objects.all()
+    return Keyword.objects.all().order_by("id")
 
 @register.simple_tag()
 def get_article_category():
-    return Category.objects.filter(for_article=1)
+    return Category.objects.filter(for_article=1).order_by("id")
 
 @register.simple_tag()
 def get_articles_list(type, count):
@@ -91,42 +91,3 @@ def comments_tree(comments, user, parent=False, counter=0):
             html += "</div>"
 
     return html
-
-# {% for comment in comments %}
-#             <div class="comment-wrapper">
-                
-#                 <img src="{{comment.user.profile.useravatar.image.url}}"  class="comment-user-avatar">
-
-#                 <div class="comment-block">
-
-#                     <div class="comment-header">
-#                         {{ user.username }}
-#                         {% if comment.parent.user %}
-#                             <img src="/media/answer.png" class="comment-header-answer-icon">
-#                             <span class="comment-header-answer">
-#                                 {{ comment.parent.user }}
-#                             </span>
-#                         {% endif %}
-#                         <span class="comment-header-date">
-#                             ● {{ comment.date }}
-#                         </span>
-#                     </div>
-                    
-#                     <div class="comment-content">
-#                         {{ comment.content }}
-#                     </div>
-
-#                     <div class="comment-footer">
-#                         <a href="#formComment" onclick="addComment('{{ comment.user.username }}', '{{ comment.id }}')" class="comment-action">
-#                             ● Ответить
-#                         </a>
-#                         {% if user.id == comment.user.id %}
-#                             <a href="#formComment" onclick="EditingComment('{{ comment.content }}', '{{ comment.id }}')" class="comment-action">
-#                                 ● Редактировать
-#                             </a>
-#                         {% endif %}
-#                     </div>
-
-#                 </div>
-#             </div>
-#         {% endfor %}
