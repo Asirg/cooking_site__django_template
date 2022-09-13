@@ -124,7 +124,7 @@ DATABASES = {
 
         'HOST': 'db',
 
-        'PORT': '5435',
+        'PORT': '5432',
 
     }
 
