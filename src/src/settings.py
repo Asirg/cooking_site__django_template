@@ -90,21 +90,41 @@ WSGI_APPLICATION = 'src.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# DATABASES = {
+
+#     'default': {
+
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+
+#         'NAME': 'nyamki',
+
+#         'USER': 'nyamki',
+
+#         'PASSWORD': '6tu7m8ir6YTHFD6',
+
+#         'HOST': '192.168.43.223',
+
+#         'PORT': '5432',
+
+#     }
+
+# }
+
 DATABASES = {
 
     'default': {
 
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': 'nyamki',
+        'NAME': 'db',
 
-        'USER': 'nyamki',
+        'USER': 'user',
 
-        'PASSWORD': '6tu7m8ir6YTHFD6',
+        'PASSWORD': 'pass',
 
-        'HOST': '192.168.43.223',
+        'HOST': 'db',
 
-        'PORT': '5432',
+        'PORT': '5435',
 
     }
 
