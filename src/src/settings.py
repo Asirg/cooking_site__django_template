@@ -102,7 +102,7 @@ DATABASES = {
 
         'PASSWORD': '6tu7m8ir6YTHFD6',
 
-        'HOST': 'localhost',
+        'HOST': '192.168.43.223',
 
         'PORT': '5432',
 
@@ -291,3 +291,5 @@ CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ":" + REDIS_PORT + '/0'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+
+# TRANSLATABLE_MODEL_MODULES = ["nyamki.models"]

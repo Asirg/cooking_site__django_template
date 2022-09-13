@@ -23,7 +23,8 @@ def get_article_category():
 
 @register.simple_tag()
 def get_articles_list(type, count):
-    queryset = Article.objects.filter(type__name_ru=type, name__isnull=False).order_by("date")[:count]
+    # queryset = Article.objects.filter(type__name_ru=type, name__isnull=False).order_by("date")[:count]
+    queryset = Article.objects.filter(type__name=type, name__isnull=False).order_by("date")[:count]
     return queryset
 
 @register.filter()

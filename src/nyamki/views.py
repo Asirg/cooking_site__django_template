@@ -1,3 +1,4 @@
+from ast import keyword
 from shutil import register_unpack_format
 from unicodedata import category
 from django.http import JsonResponse, HttpResponse
@@ -132,7 +133,10 @@ class СalculatorView(ListView):
     template_name="nyamki/calculator.html"
 
     def get_queryset(self):
-        return self.request.user.profile.save_articles.all().filter(type_id=1)
+        if self.request.user.is_authenticated:
+            return self.request.user.profile.save_articles.all().filter(type_id=1)
+        else:
+            return Article.objects.filter(keywords__id=1)
 
 class ArticlePrintView(DetailView):
     model = Article

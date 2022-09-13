@@ -1,0 +1,8 @@
+celery==5.2.7
+Django==4.1.1
+django-allauth==0.51.0
+django-ckeditor==6.5.1
+django-js-asset==2.0.0
+django-modeltranslation==0.18.4
+psycopg2-binary==2.9.3
+Pillow==9.2.0
